@@ -1,14 +1,20 @@
 <script lang="ts">
 
-	let { languages = $bindable(), language } = $props();
+	import type { EventHandler } from 'svelte/elements';
+
+	let { languages = $bindable(), language, oninput }: {
+		languages: string,
+		language: string,
+		oninput: EventHandler
+	} = $props();
 
 	function isSelected() {
-		console.log({ languages, language });
+		// console.log({ languages, language });
 		return languages.includes(language);
 	}
 
 	function flipLanguage() {
-		console.log('before:', { languages, language });
+		// console.log('before:', { languages, language });
 		const languageArray = languages.split(/ *, */).filter(Boolean);
 		const index = languageArray.indexOf(language);
 		if (index !== -1) {
@@ -19,7 +25,7 @@
 		languages = languageArray
 			.toSorted((a, b) => a.localeCompare(b))
 			.join(',');
-		console.log('after:', { languages, language });
+		// console.log('after:', { languages, language });
 	}
 
 </script>
@@ -33,6 +39,7 @@
 		checked={isSelected()}
 		name={language}
 		onclick={()=>flipLanguage()}
+		{oninput}
 
 	/>
 </label>

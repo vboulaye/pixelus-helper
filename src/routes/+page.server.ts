@@ -51,6 +51,7 @@ export const load: PageServerLoad = async ({ url, fetch }) => {
 	);
 
 	const uniqueWords = [...new Set(words)].sort((a, b) => a.localeCompare(b));
+	console.log('uniqueWords', uniqueWords.length, {game});
 	return {
 		...game,
 		words: uniqueWords
