@@ -1,7 +1,7 @@
 <script lang="ts">
-	export let data;
+	let { data } = $props();
 
-	let { template, exclusions, includes, words } = data;
+	let { template, exclusions, includes, words } = $state(data);
 </script>
 
 <h4>Query</h4>
