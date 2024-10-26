@@ -1,35 +1,58 @@
-import type { PageLoad } from './$types';
-import fs from 'fs';
-import util from 'util';
+import type { PageServerLoad } from './$types';
+import { PixelusGame } from './PixelusGame';
 
-const readFilePromise = util.promisify(fs.readFile);
+//=> […, 'abmhos', 'abnegate', …]
+
+// const readFilePromise = util.promisify(fs.readFile);
 
 const cache = new Map<string, string[]>();
 
-export const load: PageLoad = async ({ url }) => {
-	// redirect(302, '/products')
-	const template = url.searchParams.get('template') || '';
-	const exclusions = url.searchParams.get('exclusions') || '';
-	const includes = url.searchParams.get('includes') || '';
-
-	const file = '/usr/share/dict/british-english'; //path.join(__dirname, 'file.txt');
-	let ductionarywords = cache.get(file);
-	if (!ductionarywords) {
-		let wordsList = await readFilePromise(file, 'utf8');
+async function getWords(lang: string, fetchFunction: typeof fetch): Promise<string[]> {
+	let dictionaryWords = cache.get(lang);
+	if (!dictionaryWords) {
+		const langResponse = await fetchFunction(`${lang}.txt`);
+		if (!langResponse.ok) {
+			throw new Error(`Failed to fetch dictionary for ${lang}: ${langResponse.statusText}`);
+		}
+		let wordsList = await langResponse.text();
 		wordsList = wordsList?.toLowerCase() || '';
-		ductionarywords = wordsList.split('\n').filter((w) => !w.includes("'"));
-		cache.set(file, ductionarywords);
+		dictionaryWords = wordsList
+			.split('\n')
+			.filter((w) => !w.includes("'"))
+			//transliterate accentuated caracters
+			.map((w) => w.normalize('NFD').replace(/[\u0300-\u036f]/g, ''));
+		//keep distinct words
+		dictionaryWords = [...new Set(dictionaryWords)];
+		cache.set(lang, dictionaryWords || []);
 	}
-	console.log('template', template);
-	const words = ductionarywords.filter(
-		(word) =>
-			word.length === template.length &&
-			word.match(template) &&
-			[...exclusions].filter((letter) => word.includes(letter)).length === 0 &&
-			[...includes].filter((letter) => word.includes(letter)).length === includes.length
+	if (!dictionaryWords) {
+		throw new Error('No dictionary words found');
+	}
+	return dictionaryWords;
+}
+
+export const load: PageServerLoad = async ({ url, fetch }) => {
+	const game = PixelusGame.fromURL(url);
+	const dictionaries = await Promise.all(
+		game.languages
+			.split(/ *, */)
+			.map(async (lang) => await getWords(lang.trim(), fetch))
 	);
+
+	const dictionaryWords = dictionaries.flatMap((x) => x).toSorted((a, b) => a.localeCompare(b));
+	// console.log('dictionaries', dictionaryWords);
+
+	const words = dictionaryWords.filter(
+		(word) =>
+			word.length === game.template.length &&
+			word.match(game.template) &&
+			[...game.exclusions].filter((letter) => word.includes(letter)).length === 0 &&
+			[...game.includes].filter((letter) => word.includes(letter)).length === game.includes.length
+	);
+
+	const uniqueWords = [...new Set(words)].sort((a, b) => a.localeCompare(b));
 	return {
-		template,exclusions, includes,
-		words
+		...game,
+		words: uniqueWords
 	};
 };
