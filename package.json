@@ -13,7 +13,7 @@
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
-		"postinstall": "curl -s  https://raw.githubusercontent.com/atebits/Words/master/Words/en.txt  > src/wordlist.txt"
+		"postinstall": "./postinstall.sh"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.49.0",

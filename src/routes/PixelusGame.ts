@@ -19,7 +19,7 @@ export class PixelusGame {
 			template = '',
 			exclusions = '',
 			includes = '',
-			languages = 'en,fr'
+			languages = 'en,fr,names'
 		} = JSON.parse(state);
 		return new PixelusGame(template, exclusions, includes, languages);
 	}

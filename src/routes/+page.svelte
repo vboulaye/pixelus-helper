@@ -78,6 +78,7 @@
 	<LanguageSelection bind:languages={languages} language="fr" oninput={submitOnInput} />
 	<LanguageSelection bind:languages={languages} language="es" oninput={submitOnInput} />
 	<LanguageSelection bind:languages={languages} language="de" oninput={submitOnInput} />
+	<LanguageSelection bind:languages={languages} language="names" oninput={submitOnInput} />
 
 	<input type="submit" value="search" onclick={submitOnInput} />
 </form>

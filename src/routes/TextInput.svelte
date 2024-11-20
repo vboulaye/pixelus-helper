@@ -15,17 +15,6 @@
 	} = $props();
 
 
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-	function debounce(func: Function, timeout = 300) {
-		let timer: number;
-		return (...args: any[]) => {
-			clearTimeout(timer);
-			timer = setTimeout(() => {
-				func(...args);
-			}, timeout) as unknown as number;
-		};
-	}
-
 	async function submitOnInput(e: Event) {
 		if (!e.target) return;
 		// retrieve the form submit url with encoded get search parameters
@@ -58,7 +47,7 @@
 		class="word"
 		bind:value={value}
 		name={name}
-		oninput={debounce(submitOnInput)}
+		onchange={submitOnInput}
 		{...props}
 	/>
 </label>

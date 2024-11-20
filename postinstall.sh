@@ -8,3 +8,5 @@ do
   echo "Downloading $lang.txt from $url"
   curl -s -o ./static/$lang.txt $url
 done
+
+curl -s -o ./static/names.txt https://raw.githubusercontent.com/kkrypt0nn/wordlists/refs/heads/main/wordlists/names/names.txt
