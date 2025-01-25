@@ -1,6 +1,7 @@
 <script lang="ts">
 
 	import { goto } from '$app/navigation';
+	import { submitOnInput } from './submitOnInput';
 
 	let {
 		value = $bindable(),
@@ -11,32 +12,10 @@
 		value: string,
 		label: string,
 		name: string,
-		props: unknown[]
+		[k:string]: unknown,
 	} = $props();
 
 
-	async function submitOnInput(e: Event) {
-		if (!e.target) return;
-		// retrieve the form submit url with encoded get search parameters
-		const eventTarget = e.target as HTMLInputElement;
-		const form = eventTarget.form as HTMLFormElement;
-		const url = new URL(form.action || location.href);
-		const params = new URLSearchParams(url.search);
-		// update the search parameters with the form values
-		for (const input of (form.elements as any)) {
-			if (input.name) {
-				params.set(input.name, input.value);
-			}
-		}
-		// update the url with the new search parameters
-		url.search = params.toString();
-		// navigate to the new url
-		// history.pushState(null, '', url.toString());
-		await goto(url.toString(), { keepFocus: true, invalidateAll: true });
-		// prevent the form from submitting
-		e.preventDefault();
-
-	}
 </script>
 
 <label for={name}

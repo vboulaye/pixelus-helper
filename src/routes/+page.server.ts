@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { PixelusGame } from './PixelusGame';
+import { PixelusGameSvelte } from './PixelusGame.svelte';
 
 //=> […, 'abmhos', 'abnegate', …]
 
@@ -32,7 +32,7 @@ async function getWords(lang: string, fetchFunction: typeof fetch): Promise<stri
 }
 
 export const load: PageServerLoad = async ({ url, fetch }) => {
-	const game = PixelusGame.fromURL(url);
+	const game = PixelusGameSvelte.fromURL(url);
 	const dictionaries = await Promise.all(
 		game.languages
 			.split(/ *, */)

@@ -1,11 +1,10 @@
 <script lang="ts">
 
-	import type { EventHandler } from 'svelte/elements';
+	import { submitOnInput } from './submitOnInput';
 
-	let { languages = $bindable(), language, oninput }: {
+	let { languages = $bindable(), language }: {
 		languages: string,
 		language: string,
-		oninput: EventHandler
 	} = $props();
 
 	function isSelected() {
@@ -27,7 +26,6 @@
 			.join(',');
 		// console.log('after:', { languages, language });
 	}
-
 </script>
 
 
@@ -39,7 +37,7 @@
 		checked={isSelected()}
 		name={language}
 		onclick={()=>flipLanguage()}
-		{oninput}
+		oninput={submitOnInput}
 
 	/>
 </label>
