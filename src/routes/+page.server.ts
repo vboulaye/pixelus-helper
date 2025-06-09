@@ -1,9 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { PixelusGameSvelte } from './PixelusGame.svelte';
 
-//=> […, 'abmhos', 'abnegate', …]
-
-// const readFilePromise = util.promisify(fs.readFile);
 
 const cache = new Map<string, string[]>();
 

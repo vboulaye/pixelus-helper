@@ -29,7 +29,9 @@ export class PixelusGameSvelte {
 	}
 
 	static fromURL(url: URL): PixelusGameSvelte {
-		return PixelusGameSvelte.fromState(JSON.stringify(Object.fromEntries(url.searchParams.entries())));
+		return PixelusGameSvelte.fromState(
+			JSON.stringify(Object.fromEntries(url.searchParams.entries()))
+		);
 	}
 
 	private static getFormDataField(data: FormData, fieldName: string): string {
@@ -40,3 +42,5 @@ export class PixelusGameSvelte {
 		return JSON.stringify(this);
 	}
 }
+
+

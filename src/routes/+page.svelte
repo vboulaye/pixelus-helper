@@ -1,6 +1,5 @@
 <script lang="ts">
 
-	import { goto } from '$app/navigation';
 	import LanguageSelection from './LanguageSelection.svelte';
 	import TextInput from './TextInput.svelte';
 	import { submitOnInput } from './submitOnInput';
@@ -13,19 +12,7 @@
 
 <h4>Query</h4>
 <form>
-	<!--	<label for="template"-->
-	<!--	>searched word-->
-	<!--		<input-->
-	<!--			id="template"-->
-	<!--			pattern="[a-z.]*"-->
-	<!--			type="text"-->
-	<!--			class="word"-->
-	<!--			placeholder="the word to search with . for missing characters"-->
-	<!--			bind:value={data.template}-->
-	<!--			name="template"-->
-	<!--			oninput={submitOnInput}-->
-	<!--		/>-->
-	<!--	</label>-->
+
 	<TextInput name="template"
 						 label="searched word"
 						 bind:value={data.template}
@@ -64,7 +51,7 @@
 <h4>Words</h4>
 
 <div class="word" style:column-width="{data.template.length}rem">
-	{#each data.words as word}
+	{#each data.words as word(word)}
 		<div>{word}</div>
 	{/each}
 </div>
