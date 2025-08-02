@@ -5,16 +5,30 @@
 
 	const { data } = $props();
 	let languages = $state(data.languages);
+	let template = $derived(data.template);
 
+	let templateLength = $state(10); // valeur par défaut
+	$effect(() => {
+		template = '.'.repeat(templateLength);
+	});
 
 </script>
 
 <h4>Query</h4>
 <form>
 
+	<div>
+
+		<TextInput name="wordLength"
+							 label="word length"
+							 style="width: 30rem;"
+							 type="range" min="1" max="30" bind:value={templateLength} />
+		{templateLength}
+	</div>
+
 	<TextInput name="template"
 						 label="searched word"
-						 bind:value={data.template}
+						 bind:value={template}
 						 pattern="[a-z.]*"
 						 placeholder="the word to search with . for missing characters"
 	/>

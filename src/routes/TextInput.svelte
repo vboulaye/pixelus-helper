@@ -1,6 +1,4 @@
 <script lang="ts">
-
-	import { goto } from '$app/navigation';
 	import { submitOnInput } from './submitOnInput';
 
 	let {
@@ -9,7 +7,7 @@
 		label,
 		...props
 	}: {
-		value: string,
+		value: string|number,
 		label: string,
 		name: string,
 		[k:string]: unknown,

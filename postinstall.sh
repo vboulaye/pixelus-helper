@@ -10,3 +10,6 @@ do
 done
 
 curl -s -o ./static/names.txt https://raw.githubusercontent.com/kkrypt0nn/wordlists/refs/heads/main/wordlists/names/names.txt
+
+
+node --loader ts-node/esm ./deezerArtistsDownloader.ts
