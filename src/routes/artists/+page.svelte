@@ -1,15 +1,13 @@
 <script lang="ts">
 
-	import LanguageSelection from './LanguageSelection.svelte';
-	import TextInput from './TextInput.svelte';
-	import { submitOnInput } from './submitOnInput';
+	import TextInput from '../TextInput.svelte';
+	import { submitOnInput } from '../submitOnInput';
 
 	const { data } = $props();
 	let languages = $state(data.languages);
 
 
 </script>
-
 
 <h4>Query</h4>
 <form>
@@ -40,11 +38,6 @@
 		placeholder="includes letters"
 		name="languages"
 	/>
-	<LanguageSelection bind:languages={languages} language="en"  />
-	<LanguageSelection bind:languages={languages} language="fr"  />
-	<LanguageSelection bind:languages={languages} language="es"  />
-	<LanguageSelection bind:languages={languages} language="de"  />
-	<LanguageSelection bind:languages={languages} language="names"  />
 
 	<input type="submit" value="search" onclick={submitOnInput} />
 </form>
