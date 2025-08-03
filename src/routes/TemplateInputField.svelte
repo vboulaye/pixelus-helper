@@ -22,10 +22,10 @@
 <div>
 
 	<TextInput name="wordLength"
-						 label="word length"
+						 label="word length ({templateLength})"
 						 style="width: 30rem;"
 						 type="range" min="1" max="30" bind:value={templateLength} />
-	{templateLength}
+
 </div>
 <div>
 	<TextInput name="template"

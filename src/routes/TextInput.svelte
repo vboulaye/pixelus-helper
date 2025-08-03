@@ -7,16 +7,19 @@
 		label,
 		...props
 	}: {
-		value: string|number,
+		value: string | number,
 		label: string,
 		name: string,
-		[k:string]: unknown,
+		[k: string]: unknown,
 	} = $props();
 
 
 </script>
 
-<label for={name}>{label}
+<div class="labelled-field">
+	<label for={name} class="label">{label}
+
+	</label>
 	<input
 		id={name}
 		type="text"
@@ -26,10 +29,20 @@
 		onchange={submitOnInput}
 		{...props}
 	/>
-</label>
-
+</div>
 <style>
+
+    .labelled-field {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     .word {
         font-family: monospace;
+    }
+
+    .label {
+        width: 10rem;
     }
 </style>
