@@ -3,19 +3,24 @@
 	import LanguageSelection from './LanguageSelection.svelte';
 	import TextInput from './TextInput.svelte';
 	import { submitOnInput } from './submitOnInput';
+	import { PixelusGameSchema } from './PixelusGame.svelte';
+	import { page } from '$app/state';
+	import * as v from 'valibot';
+	import { urlToObject } from '$lib/utils/url-utils';
+	import PixelusDictionaryWords from './PixelusDictionaryWords.svelte';
 
-	const { data } = $props();
-	let languages = $state(data.languages);
-	let template = $derived(data.template);
 
+	const game = $derived(v.parse(PixelusGameSchema, urlToObject(page.url)));
+	let languages = $derived(game.languages);
+	let template = $derived(game.template);
 	let templateLength = $state(10); // valeur par défaut
 
 	$effect(() => {
+
 		template = '.'.repeat(templateLength);
 	});
 
 </script>
-
 
 <h4>Query</h4>
 <form>
@@ -35,13 +40,13 @@
 	/>
 	<TextInput name="exclusions"
 						 label="excluded letters"
-						 bind:value={data.exclusions}
+						 bind:value={game.exclusions}
 						 pattern="[a-z]*"
 						 placeholder="excluded letters"
 	/>
 	<TextInput name="includes"
 						 label="included letters"
-						 bind:value={data.includes}
+						 bind:value={game.includes}
 						 pattern="[a-z]*"
 						 placeholder="included letters"
 	/>
@@ -61,17 +66,13 @@
 
 	<input type="submit" value="search" onclick={submitOnInput} />
 </form>
+<svelte:boundary>
 
-<h4>Words</h4>
+	{#snippet pending()}
+		<p>loading...</p>
+	{/snippet}
 
-<div class="word" style:column-width="{data.template.length}rem">
-	{#each data.words as word(word)}
-		<div>{word}</div>
-	{/each}
-</div>
+	<PixelusDictionaryWords {game} />
 
-<style>
-    .word {
-        font-family: monospace;
-    }
-</style>
+</svelte:boundary>
+

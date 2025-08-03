@@ -1,13 +1,15 @@
-import type { PageServerLoad } from './$types';
-import { PixelusGameSvelte } from './PixelusGame.svelte';
-
+import { PixelusGameSchema } from './PixelusGame.svelte';
+import * as v from 'valibot';
+import { getRequestEvent } from '$app/server';
 
 const cache = new Map<string, string[]>();
 
-async function getWords(lang: string, fetchFunction: typeof fetch): Promise<string[]> {
+async function getWords(lang: string): Promise<string[]> {
+
+	const { fetch } = getRequestEvent();
 	let dictionaryWords = cache.get(lang);
 	if (!dictionaryWords) {
-		const langResponse = await fetchFunction(`${lang}.txt`);
+		const langResponse = await fetch(`${lang}.txt`);
 		if (!langResponse.ok) {
 			throw new Error(`Failed to fetch dictionary for ${lang}: ${langResponse.statusText}`);
 		}
@@ -28,12 +30,11 @@ async function getWords(lang: string, fetchFunction: typeof fetch): Promise<stri
 	return dictionaryWords;
 }
 
-export const load: PageServerLoad = async ({ url, fetch }) => {
-	const game = PixelusGameSvelte.fromURL(url);
+type PixelusGameType = v.InferOutput<typeof PixelusGameSchema>;
+
+export async function getMatchingWords(game: PixelusGameType, fetchFunction: typeof fetch) {
 	const dictionaries = await Promise.all(
-		game.languages
-			.split(/ *, */)
-			.map(async (lang) => await getWords(lang.trim(), fetch))
+		game.languages.split(/ *, */).map(async (lang) => await getWords(lang.trim()))
 	);
 
 	const dictionaryWords = dictionaries.flatMap((x) => x).toSorted((a, b) => a.localeCompare(b));
@@ -48,9 +49,6 @@ export const load: PageServerLoad = async ({ url, fetch }) => {
 	);
 
 	const uniqueWords = [...new Set(words)].sort((a, b) => a.localeCompare(b));
-	console.log('uniqueWords', uniqueWords.length, {game});
-	return {
-		...game,
-		words: uniqueWords
-	};
-};
+	console.log('uniqueWords', uniqueWords.length, { game });
+	return uniqueWords;
+}

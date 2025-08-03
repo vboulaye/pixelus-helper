@@ -16,8 +16,7 @@
 
 </script>
 
-<label for={name}
->{label}
+<label for={name}>{label}
 	<input
 		id={name}
 		type="text"

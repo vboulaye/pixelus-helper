@@ -9,7 +9,9 @@
 
 	function isSelected() {
 		// console.log({ languages, language });
-		return languages.includes(language);
+		const languageArray = languages.split(/ *, */).filter(Boolean);
+		const index = languageArray.indexOf(language);
+		return  (index !== -1);
 	}
 
 	function flipLanguage() {
